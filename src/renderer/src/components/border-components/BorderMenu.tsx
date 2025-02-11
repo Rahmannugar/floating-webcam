@@ -1,6 +1,6 @@
 interface BorderMenuProps {
-  setOpenBorderMenu: any
-  setDefaultMenu: any
+  setOpenBorderMenu: (open: boolean) => void
+  setDefaultMenu: (open: boolean) => void
 }
 
 const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
@@ -96,7 +96,7 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
 
       <button
         onClick={handleMenu}
-        className="hover:bg-[#212339] w-full flex justify-center items-center py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        className="hover:bg-[#212339] w-full py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
       >
         <svg
           width="30"

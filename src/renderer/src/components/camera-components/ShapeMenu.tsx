@@ -1,6 +1,6 @@
 interface ShapeMenuProps {
-  setOpenShapeMenu: any
-  setDefaultMenu: any
+  setOpenShapeMenu: (open: boolean) => void
+  setDefaultMenu: (open: boolean) => void
 }
 
 const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
@@ -8,21 +8,56 @@ const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
     setDefaultMenu(true)
     setOpenShapeMenu(false)
   }
+
+  const handleShapeChange = (shape: 'circle' | 'square' | 'rectangle') => {
+    const styles = {
+      circle: {
+        width: '100px',
+        height: '100px',
+        borderRadius: '100%'
+      },
+      square: {
+        width: '100px',
+        height: '100px',
+        borderRadius: '0'
+      },
+      rectangle: {
+        width: '120px',
+        height: '90px',
+        borderRadius: '0'
+      }
+    }
+
+    window.electronAPI.sendSync('shared-window-channel', {
+      type: 'set-camera-shape',
+      payload: styles[shape]
+    })
+  }
+
   return (
     <div className=" space-y-2">
       <div className="text-white w-[44px] text-[20px] bg-[#3B4956] rounded-[8px] font-bold flex flex-col">
         {/* circle button */}
-        <button className="bg-[#0D6EE0] w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200">
+        <button
+          onClick={() => handleShapeChange('circle')}
+          className="bg-[#0D6EE0] w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200"
+        >
           <div className="w-[24px] h-[24px] bg-white rounded-full"></div>
         </button>
         <div className="bg-[#4A5C6C] w-[30px] mx-auto h-[1.5px]"></div>
         {/* square button */}
-        <button className="w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200">
+        <button
+          onClick={() => handleShapeChange('square')}
+          className="w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200"
+        >
           <div className="w-[24px] h-[24px] bg-white"></div>
         </button>
         <div className="bg-[#4A5C6C] w-[30px] mx-auto h-[1.5px]"></div>
         {/* rectangle button */}
-        <button className=" w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200">
+        <button
+          onClick={() => handleShapeChange('rectangle')}
+          className=" w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200"
+        >
           <div className="w-[24px] h-[32px] bg-white"></div>
         </button>
       </div>

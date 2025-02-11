@@ -1,6 +1,6 @@
 interface ResizeMenuProps {
-  setOpenResizeMenu: any
-  setDefaultMenu: any
+  setOpenResizeMenu: (open: boolean) => void
+  setDefaultMenu: (open: boolean) => void
 }
 
 const ResizeMenu = ({ setOpenResizeMenu, setDefaultMenu }: ResizeMenuProps) => {

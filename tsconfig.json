@@ -1,4 +1,11 @@
 {
+ 
+  "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["node"],
+    
+  },
+  "include": ["src/**/*", "src/types.d.ts"],
   "files": [],
   "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
 }
