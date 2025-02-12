@@ -108,6 +108,10 @@ app.whenReady().then(async () => {
     camWindow.setSize(size.width + 20, size.height + 20)
     camWindow.webContents.send('update-size', size)
   })
+  ipcMain.on('toggle-flip-camera', () => {
+    if (!camWindow) return
+    camWindow.webContents.send('toggle-flip-camera')
+  })
 
   ipcMain.on('change-camera-shape', (_event, shape) => {
     if (!camWindow || !originalCamSize) return

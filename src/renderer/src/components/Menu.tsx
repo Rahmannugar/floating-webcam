@@ -27,6 +27,10 @@ const Menu = ({
     setOpenBorderMenu(true)
     setDefaultMenu(false)
   }
+  const handleFlipCamera = () => {
+    window.electron.ipcRenderer.send('toggle-flip-camera')
+  }
+
   return (
     <div className="flex flex-col justify-center items-center">
       {/* camera button */}
@@ -77,7 +81,10 @@ const Menu = ({
       </button>
 
       {/* flip camera button */}
-      <button className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200 ">
+      <button
+        onClick={handleFlipCamera}
+        className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200 "
+      >
         <svg
           width="30"
           height="30"

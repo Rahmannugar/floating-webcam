@@ -19,6 +19,7 @@ if (!videoPlayer) {
 
 let latestSize = { width: 120, height: 120 }
 
+//change size
 window.electron.ipcRenderer.on('update-size', (_event, size) => {
   if (!videoPlayer) return
 
@@ -28,6 +29,7 @@ window.electron.ipcRenderer.on('update-size', (_event, size) => {
   videoPlayer.style.height = `${size.height}px`
 })
 
+//change shape
 window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
   if (!videoPlayer) return
 
@@ -43,5 +45,16 @@ window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
     videoPlayer.style.borderRadius = '0'
     videoPlayer.style.width = `${latestSize.width}px`
     videoPlayer.style.height = `${latestSize.height + 50}px`
+  }
+})
+
+//flip camera
+let isFlipped = false
+
+window.electron.ipcRenderer.on('toggle-flip-camera', () => {
+  isFlipped = !isFlipped
+  const videoElement = document.querySelector('video')
+  if (videoElement) {
+    videoElement.style.transform = isFlipped ? 'scaleX(-1)' : 'scaleX(1)'
   }
 })
