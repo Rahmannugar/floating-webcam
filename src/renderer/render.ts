@@ -17,30 +17,31 @@ if (!videoPlayer) {
   startCamera()
 }
 
-let originalHeight: number | null = null
-
-window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
-  if (!videoPlayer) return
-
-  if (!originalHeight) {
-    originalHeight = videoPlayer.clientHeight
-  }
-
-  if (shape === 'circle') {
-    videoPlayer.style.borderRadius = '50%'
-    videoPlayer.style.height = `${originalHeight}px`
-  } else if (shape === 'square') {
-    videoPlayer.style.borderRadius = '0'
-    videoPlayer.style.height = `${originalHeight}px`
-  } else if (shape === 'rectangle') {
-    videoPlayer.style.borderRadius = '0'
-    videoPlayer.style.height = `${originalHeight + 50}px`
-  }
-})
+let latestSize = { width: 120, height: 120 }
 
 window.electron.ipcRenderer.on('update-size', (_event, size) => {
   if (!videoPlayer) return
 
+  latestSize = size
+
   videoPlayer.style.width = `${size.width}px`
   videoPlayer.style.height = `${size.height}px`
+})
+
+window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
+  if (!videoPlayer) return
+
+  if (shape === 'circle') {
+    videoPlayer.style.borderRadius = '50%'
+    videoPlayer.style.width = `${latestSize.width}px`
+    videoPlayer.style.height = `${latestSize.height}px`
+  } else if (shape === 'square') {
+    videoPlayer.style.borderRadius = '0'
+    videoPlayer.style.width = `${latestSize.width}px`
+    videoPlayer.style.height = `${latestSize.height}px`
+  } else if (shape === 'rectangle') {
+    videoPlayer.style.borderRadius = '0'
+    videoPlayer.style.width = `${latestSize.width}px`
+    videoPlayer.style.height = `${latestSize.height + 50}px`
+  }
 })

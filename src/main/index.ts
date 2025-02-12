@@ -103,16 +103,16 @@ app.whenReady().then(async () => {
     BrowserWindow.getAllWindows().forEach((window) => window.close())
   })
 
-  ipcMain.on('change-camera-shape', (_event, shape) => {
-    if (!camWindow || !originalCamSize) return
-    camWindow.setSize(originalCamSize.width, originalCamSize.height)
-    camWindow.webContents.send('update-shape', shape)
-  })
-
   ipcMain.on('change-camera-size', (_event, size) => {
     if (!camWindow) return
     camWindow.setSize(size.width + 20, size.height + 20)
     camWindow.webContents.send('update-size', size)
+  })
+
+  ipcMain.on('change-camera-shape', (_event, shape) => {
+    if (!camWindow || !originalCamSize) return
+    camWindow.setSize(originalCamSize.width, originalCamSize.height)
+    camWindow.webContents.send('update-shape', shape)
   })
 
   app.on('activate', function () {
