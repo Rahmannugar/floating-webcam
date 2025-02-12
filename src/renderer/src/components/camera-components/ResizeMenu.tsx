@@ -7,17 +7,26 @@ interface ResizeMenuProps {
 
 const ResizeMenu = ({ setOpenResizeMenu, setDefaultMenu }: ResizeMenuProps) => {
   const [size, setSize] = useState('S')
+
   const handleMenu = () => {
     setDefaultMenu(true)
     setOpenResizeMenu(false)
   }
 
   const handleSizeChange = (size: 'S' | 'M' | 'L' | 'XL') => {
-    window.electron.ipcRenderer.send('change-camera-sizee', size)
+    const sizeMap = {
+      S: { width: 120, height: 120 },
+      M: { width: 200, height: 200 },
+      L: { width: 300, height: 300 },
+      XL: { width: 400, height: 400 }
+    }
+
+    window.electron.ipcRenderer.send('change-camera-size', sizeMap[size])
     setSize(size)
   }
+
   return (
-    <div className=" space-y-2">
+    <div className="space-y-2">
       <div className="text-white w-[44px] text-[20px] bg-[#3B4956] rounded-[8px] font-bold flex flex-col">
         <button
           onClick={() => handleSizeChange('S')}
@@ -30,21 +39,21 @@ const ResizeMenu = ({ setOpenResizeMenu, setDefaultMenu }: ResizeMenuProps) => {
         ></div>
         <button
           onClick={() => handleSizeChange('M')}
-          className={`${size === 'S' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] my-[2px] py-[6px] rounded-[8px] transition-all duration-200`}
+          className={`${size === 'M' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] my-[2px] py-[6px] rounded-[8px] transition-all duration-200`}
         >
           M
         </button>
         <div className="bg-[#4A5C6C] w-[30px] mx-auto h-[1.5px]"></div>
         <button
           onClick={() => handleSizeChange('L')}
-          className={`${size === 'S' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] my-[2px] py-[6px] rounded-[8px] transition-all duration-200`}
+          className={`${size === 'L' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] my-[2px] py-[6px] rounded-[8px] transition-all duration-200`}
         >
           L
         </button>
         <div className="bg-[#4A5C6C] w-[30px] mx-auto h-[1.5px]"></div>
         <button
           onClick={() => handleSizeChange('XL')}
-          className={`${size === 'S' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] py-[6px] mt-[2px] rounded-[8px] transition-all duration-200`}
+          className={`${size === 'XL' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] py-[6px] mt-[2px] rounded-[8px] transition-all duration-200`}
         >
           XL
         </button>
@@ -70,4 +79,5 @@ const ResizeMenu = ({ setOpenResizeMenu, setDefaultMenu }: ResizeMenuProps) => {
     </div>
   )
 }
+
 export default ResizeMenu

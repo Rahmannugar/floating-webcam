@@ -100,17 +100,19 @@ app.whenReady().then(async () => {
   camWindow.setAlwaysOnTop(true, 'floating', 1)
 
   ipcMain.on('close-window', () => {
-    const allWindows = BrowserWindow.getAllWindows()
-    allWindows.forEach((window) => {
-      window.close()
-    })
+    BrowserWindow.getAllWindows().forEach((window) => window.close())
   })
 
   ipcMain.on('change-camera-shape', (_event, shape) => {
     if (!camWindow || !originalCamSize) return
-
     camWindow.setSize(originalCamSize.width, originalCamSize.height)
     camWindow.webContents.send('update-shape', shape)
+  })
+
+  ipcMain.on('change-camera-size', (_event, size) => {
+    if (!camWindow) return
+    camWindow.setSize(size.width + 20, size.height + 20)
+    camWindow.webContents.send('update-size', size)
   })
 
   app.on('activate', function () {

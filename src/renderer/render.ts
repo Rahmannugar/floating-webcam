@@ -37,3 +37,10 @@ window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
     videoPlayer.style.height = `${originalHeight + 50}px`
   }
 })
+
+window.electron.ipcRenderer.on('update-size', (_event, size) => {
+  if (!videoPlayer) return
+
+  videoPlayer.style.width = `${size.width}px`
+  videoPlayer.style.height = `${size.height}px`
+})
