@@ -5,6 +5,7 @@ import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/floatcam-circle.png?asset'
 
 let camWindow: BrowserWindow | null = null
+let originalCamSize: { width: number; height: number } | null = null
 
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -45,6 +46,8 @@ function createMainWindow(): BrowserWindow {
 
 function createCameraWindow(): BrowserWindow {
   camWindow = new BrowserWindow({
+    width: 120,
+    height: 120,
     maxWidth: 500,
     maxHeight: 500,
     resizable: false,
@@ -57,6 +60,8 @@ function createCameraWindow(): BrowserWindow {
       preload: join(__dirname, '../preload/index.js')
     }
   })
+
+  originalCamSize = { width: 120, height: 120 }
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     camWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/cam.html`)
@@ -94,7 +99,6 @@ app.whenReady().then(async () => {
   mainWindow.show()
   camWindow.setAlwaysOnTop(true, 'floating', 1)
 
-  // Close all windows
   ipcMain.on('close-window', () => {
     const allWindows = BrowserWindow.getAllWindows()
     allWindows.forEach((window) => {
@@ -102,18 +106,10 @@ app.whenReady().then(async () => {
     })
   })
 
-  // Change shape
   ipcMain.on('change-camera-shape', (_event, shape) => {
-    if (!camWindow) return
+    if (!camWindow || !originalCamSize) return
 
-    const [currentWidth, currentHeight] = camWindow.getSize()
-
-    if (shape === 'circle' || shape === 'square') {
-      camWindow.setSize(currentWidth, currentWidth)
-    } else if (shape === 'rectangle') {
-      camWindow.setSize(currentWidth, currentHeight + 50)
-    }
-
+    camWindow.setSize(originalCamSize.width, originalCamSize.height)
     camWindow.webContents.send('update-shape', shape)
   })
 

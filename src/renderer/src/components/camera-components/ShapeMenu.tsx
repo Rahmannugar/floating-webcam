@@ -1,9 +1,12 @@
+import { useState } from 'react'
+
 interface ShapeMenuProps {
   setOpenShapeMenu: (open: boolean) => void
   setDefaultMenu: (open: boolean) => void
 }
 
 const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
+  const [shape, setShape] = useState('circle')
   const handleMenu = () => {
     setDefaultMenu(true)
     setOpenShapeMenu(false)
@@ -11,6 +14,7 @@ const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
 
   const handleShapeChange = (shape: 'circle' | 'square' | 'rectangle') => {
     window.electron.ipcRenderer.send('change-camera-shape', shape)
+    setShape(shape)
   }
 
   return (
@@ -19,7 +23,7 @@ const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
         {/* circle button */}
         <button
           onClick={() => handleShapeChange('circle')}
-          className="bg-[#0D6EE0] w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200"
+          className={`${shape === 'circle' ? 'bg-[#0D6EE0]' : ''} w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200`}
         >
           <div className="w-[24px] h-[24px] bg-white rounded-full"></div>
         </button>
@@ -27,7 +31,7 @@ const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
         {/* square button */}
         <button
           onClick={() => handleShapeChange('square')}
-          className="w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200"
+          className={`${shape === 'square' ? 'bg-[#0D6EE0]' : ''} w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200`}
         >
           <div className="w-[24px] h-[24px] bg-white"></div>
         </button>
@@ -35,7 +39,7 @@ const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
         {/* rectangle button */}
         <button
           onClick={() => handleShapeChange('rectangle')}
-          className=" w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200"
+          className={` ${shape === 'rectangle' ? 'bg-[#0D6EE0]' : ''} w-[44px] h-[44px] flex justify-center items-center mb-[2px] rounded-[8px] py-[6px] hover:bg-[#212339] transition-all duration-200`}
         >
           <div className="w-[24px] h-[32px] bg-white"></div>
         </button>

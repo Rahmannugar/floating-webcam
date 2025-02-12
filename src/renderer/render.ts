@@ -17,13 +17,23 @@ if (!videoPlayer) {
   startCamera()
 }
 
-// Unified IPC Usage
+let originalHeight: number | null = null
+
 window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
   if (!videoPlayer) return
 
+  if (!originalHeight) {
+    originalHeight = videoPlayer.clientHeight
+  }
+
   if (shape === 'circle') {
     videoPlayer.style.borderRadius = '50%'
-  } else {
+    videoPlayer.style.height = `${originalHeight}px`
+  } else if (shape === 'square') {
     videoPlayer.style.borderRadius = '0'
+    videoPlayer.style.height = `${originalHeight}px`
+  } else if (shape === 'rectangle') {
+    videoPlayer.style.borderRadius = '0'
+    videoPlayer.style.height = `${originalHeight + 50}px`
   }
 })
