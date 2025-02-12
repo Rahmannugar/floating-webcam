@@ -1,7 +1,10 @@
+//main
 import { app, shell, BrowserWindow, ipcMain, systemPreferences, Notification } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/floatcam-circle.png?asset'
+
+let camWindow: BrowserWindow | null = null
 
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -41,7 +44,7 @@ function createMainWindow(): BrowserWindow {
 }
 
 function createCameraWindow(): BrowserWindow {
-  const camWindow = new BrowserWindow({
+  camWindow = new BrowserWindow({
     maxWidth: 500,
     maxHeight: 500,
     resizable: false,
@@ -60,12 +63,13 @@ function createCameraWindow(): BrowserWindow {
   } else {
     camWindow.loadFile(join(__dirname, '../renderer/src/cam.html'))
   }
+
   return camWindow
 }
 
 app.whenReady().then(async () => {
   let camAllowed = true
-  // Only check camera permission on macOS
+
   if (process.platform === 'darwin') {
     camAllowed = await systemPreferences.askForMediaAccess('camera').then((access) => {
       if (!access) {
@@ -87,24 +91,8 @@ app.whenReady().then(async () => {
   const mainWindow = createMainWindow()
   const camWindow = createCameraWindow()
 
+  mainWindow.show()
   camWindow.setAlwaysOnTop(true, 'floating', 1)
-
-  ipcMain.on('shared-window-channel', (event, arg) => {
-    camWindow.webContents.send('shared-window-channel', arg)
-
-    if (arg.type === 'set-webcams') {
-      mainWindow.webContents.send('shared-window-channel', arg)
-    }
-
-    if (arg.type === 'set-camera-resolution') {
-      let { width, height } = arg.payload
-      width = Number(width.replace('px', '')) + 20
-      height = Number(height.replace('px', '')) + 20
-      camWindow.setSize(width, height)
-    }
-
-    event.returnValue = true
-  })
 
   // Close all windows
   ipcMain.on('close-window', () => {
@@ -112,6 +100,21 @@ app.whenReady().then(async () => {
     allWindows.forEach((window) => {
       window.close()
     })
+  })
+
+  // Change shape
+  ipcMain.on('change-camera-shape', (_event, shape) => {
+    if (!camWindow) return
+
+    const [currentWidth, currentHeight] = camWindow.getSize()
+
+    if (shape === 'circle' || shape === 'square') {
+      camWindow.setSize(currentWidth, currentWidth)
+    } else if (shape === 'rectangle') {
+      camWindow.setSize(currentWidth, currentHeight + 50)
+    }
+
+    camWindow.webContents.send('update-shape', shape)
   })
 
   app.on('activate', function () {

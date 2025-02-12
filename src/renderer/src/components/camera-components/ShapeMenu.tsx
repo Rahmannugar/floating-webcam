@@ -10,28 +10,7 @@ const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
   }
 
   const handleShapeChange = (shape: 'circle' | 'square' | 'rectangle') => {
-    const styles = {
-      circle: {
-        width: '100px',
-        height: '100px',
-        borderRadius: '100%'
-      },
-      square: {
-        width: '100px',
-        height: '100px',
-        borderRadius: '0'
-      },
-      rectangle: {
-        width: '120px',
-        height: '90px',
-        borderRadius: '0'
-      }
-    }
-
-    window.electronAPI.sendSync('shared-window-channel', {
-      type: 'set-camera-shape',
-      payload: styles[shape]
-    })
+    window.electron.ipcRenderer.send('change-camera-shape', shape)
   }
 
   return (
