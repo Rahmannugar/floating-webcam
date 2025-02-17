@@ -24,7 +24,6 @@ window.electron.ipcRenderer.on('update-size', (_event, size) => {
   if (!videoPlayer) return
 
   latestSize = size
-
   videoPlayer.style.width = `${size.width}px`
   videoPlayer.style.height = `${size.height}px`
 })
@@ -77,4 +76,10 @@ window.electron.ipcRenderer.on('update-style', (_event, style) => {
   if (!videoPlayer) return
   latestBorderStyle = style
   videoPlayer.style.borderStyle = style
+})
+
+//change color
+window.electron.ipcRenderer.on('update-color', (_event, color) => {
+  if (!videoPlayer) return
+  videoPlayer.style.borderColor = color
 })

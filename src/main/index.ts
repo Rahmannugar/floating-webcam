@@ -155,7 +155,7 @@ app.whenReady().then(async () => {
 
   ipcMain.on('change-camera-size', (_event, size) => {
     if (!camWindow) return
-    camWindow.setSize(size.width + 20, size.height + 20)
+    camWindow.setSize(size.width + 40, size.height + 40)
     camWindow.webContents.send('update-size', size)
   })
   ipcMain.on('toggle-flip-camera', (_event) => {
@@ -177,6 +177,11 @@ app.whenReady().then(async () => {
   ipcMain.on('change-camera-style', (_event, style) => {
     if (!camWindow) return
     camWindow.webContents.send('update-style', style)
+  })
+
+  ipcMain.on('change-camera-color', (_event, color) => {
+    if (!camWindow) return
+    camWindow.webContents.send('update-color', color)
   })
 
   ipcMain.on('open-border-style-window', (_event) => {
