@@ -149,6 +149,11 @@ app.whenReady().then(async () => {
     camWindow.webContents.send('update-width', width)
   })
 
+  ipcMain.on('change-camera-style', (_event, style) => {
+    if (!camWindow) return
+    camWindow.webContents.send('update-style', style)
+  })
+
   ipcMain.on('open-border-style-window', (_event) => {
     if (borderStyleWindow) {
       borderStyleWindow.focus()

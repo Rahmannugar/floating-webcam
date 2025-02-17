@@ -59,6 +59,8 @@ window.electron.ipcRenderer.on('toggle-flip-camera', (_event) => {
   }
 })
 
+let latestBorderStyle = 'solid'
+
 //change width
 window.electron.ipcRenderer.on('update-width', (_event, width) => {
   if (!videoPlayer) return
@@ -66,6 +68,13 @@ window.electron.ipcRenderer.on('update-width', (_event, width) => {
     videoPlayer.style.borderWidth = '0'
   } else {
     videoPlayer.style.borderWidth = width
-    videoPlayer.style.borderStyle = 'solid'
+    videoPlayer.style.borderStyle = latestBorderStyle
   }
+})
+
+//change style
+window.electron.ipcRenderer.on('update-style', (_event, style) => {
+  if (!videoPlayer) return
+  latestBorderStyle = style
+  videoPlayer.style.borderStyle = style
 })
