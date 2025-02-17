@@ -46,8 +46,8 @@ function createMainWindow(): BrowserWindow {
 
 function createCameraWindow(): BrowserWindow {
   camWindow = new BrowserWindow({
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     maxWidth: 500,
     maxHeight: 500,
     resizable: false,
@@ -61,7 +61,7 @@ function createCameraWindow(): BrowserWindow {
     }
   })
 
-  originalCamSize = { width: 120, height: 120 }
+  originalCamSize = { width: 140, height: 140 }
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     camWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/cam.html`)

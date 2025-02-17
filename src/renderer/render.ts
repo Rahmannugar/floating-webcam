@@ -17,7 +17,7 @@ if (!videoPlayer) {
   startCamera()
 }
 
-let latestSize = { width: 120, height: 120 }
+let latestSize = { width: 140, height: 140 }
 
 //change size
 window.electron.ipcRenderer.on('update-size', (_event, size) => {
@@ -66,5 +66,6 @@ window.electron.ipcRenderer.on('update-width', (_event, width) => {
     videoPlayer.style.borderWidth = '0'
   } else {
     videoPlayer.style.borderWidth = width
+    videoPlayer.style.borderStyle = 'solid'
   }
 })

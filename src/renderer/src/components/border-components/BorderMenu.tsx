@@ -1,9 +1,13 @@
+import { useState } from 'react'
+
 interface BorderMenuProps {
   setOpenBorderMenu: (open: boolean) => void
   setDefaultMenu: (open: boolean) => void
 }
 
 const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
+  const [width, setWidth] = useState('none')
+
   const handleMenu = () => {
     setDefaultMenu(true)
     setOpenBorderMenu(false)
@@ -11,7 +15,9 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
 
   const handleBorderWidth = (width: 'none' | 'thin' | 'medium' | 'thick') => {
     window.electron.ipcRenderer.send('change-camera-width', width)
+    setWidth(width)
   }
+  const createBorderStyleWindow = () => {}
   return (
     <div className=" space-y-2">
       <div className="text-white w-[44px]  text-[20px] bg-[#3B4956] rounded-[8px] font-bold flex flex-col">
@@ -20,7 +26,7 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           onClick={() => {
             handleBorderWidth('none')
           }}
-          className="bg-[#0D6EE0] mb-[2px] rounded-[8px] py-3 hover:bg-[#212339]  h-[44px] transition-all duration-200 flex justify-center items-center"
+          className={`${width === 'none' ? 'bg-[#0D6EE0]' : ''} mb-[2px] rounded-[8px] py-3 hover:bg-[#212339]  h-[44px] transition-all duration-200 flex justify-center items-center`}
         >
           <svg
             width="30"
@@ -46,7 +52,7 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           onClick={() => {
             handleBorderWidth('thin')
           }}
-          className="hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+          className={`${width === 'thin' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center`}
         >
           <svg
             width="19"
@@ -68,7 +74,7 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           onClick={() => {
             handleBorderWidth('medium')
           }}
-          className="hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+          className={`${width === 'medium' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center`}
         >
           <svg
             width="20"
@@ -90,7 +96,7 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           onClick={() => {
             handleBorderWidth('thick')
           }}
-          className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+          className={`${width === 'thick' ? 'bg-[#0D6EE0]' : ''} hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center`}
         >
           <svg
             width="21"
@@ -105,7 +111,10 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
             />
           </svg>
         </button>
-        <button className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center">
+        <button
+          onClick={createBorderStyleWindow}
+          className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        >
           <svg
             width="30"
             height="31"

@@ -15,7 +15,7 @@ const ResizeMenu = ({ setOpenResizeMenu, setDefaultMenu }: ResizeMenuProps) => {
 
   const handleSizeChange = (size: 'S' | 'M' | 'L' | 'XL') => {
     const sizeMap = {
-      S: { width: 120, height: 120 },
+      S: { width: 140, height: 140 },
       M: { width: 200, height: 200 },
       L: { width: 300, height: 300 },
       XL: { width: 400, height: 400 }
