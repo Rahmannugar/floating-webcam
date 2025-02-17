@@ -7,6 +7,7 @@ interface BorderMenuProps {
 
 const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
   const [width, setWidth] = useState('none')
+  const [borderStyleOpen, setBorderStyleOpen] = useState(false)
 
   const handleMenu = () => {
     setDefaultMenu(true)
@@ -17,7 +18,14 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
     window.electron.ipcRenderer.send('change-camera-width', width)
     setWidth(width)
   }
-  const createBorderStyleWindow = () => {}
+  const toggleBorderStyleWindow = () => {
+    window.electron.ipcRenderer.send('open-border-style-window')
+    setBorderStyleOpen(true)
+
+    if (borderStyleOpen) {
+      window.electron.ipcRenderer.send('close-border-style-window')
+    }
+  }
   return (
     <div className=" space-y-2">
       <div className="text-white w-[44px]  text-[20px] bg-[#3B4956] rounded-[8px] font-bold flex flex-col">
@@ -112,7 +120,7 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           </svg>
         </button>
         <button
-          onClick={createBorderStyleWindow}
+          onClick={toggleBorderStyleWindow}
           className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
         >
           <svg

@@ -6,6 +6,7 @@ import icon from '../../resources/floatcam-circle.png?asset'
 
 let camWindow: BrowserWindow | null = null
 let originalCamSize: { width: number; height: number } | null = null
+let borderStyleWindow: BrowserWindow | null = null
 
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -66,10 +67,34 @@ function createCameraWindow(): BrowserWindow {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     camWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/cam.html`)
   } else {
-    camWindow.loadFile(join(__dirname, '../renderer/src/cam.html'))
+    camWindow.loadFile(join(__dirname, '../renderer/cam.html'))
   }
 
   return camWindow
+}
+
+function createBorderStyleWindow(): BrowserWindow {
+  borderStyleWindow = new BrowserWindow({
+    width: 123,
+    height: 304,
+    resizable: false,
+    frame: false,
+    transparent: true,
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js')
+    }
+  })
+
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    borderStyleWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/borderstyle.html`)
+  } else {
+    borderStyleWindow.loadFile(join(__dirname, '../renderer/borderstyle.html'))
+  }
+
+  borderStyleWindow.on('closed', () => {
+    borderStyleWindow = null
+  })
+  return borderStyleWindow
 }
 
 app.whenReady().then(async () => {
@@ -122,6 +147,14 @@ app.whenReady().then(async () => {
   ipcMain.on('change-camera-width', (_event, width) => {
     if (!camWindow) return
     camWindow.webContents.send('update-width', width)
+  })
+
+  ipcMain.on('open-border-style-window', (_event) => {
+    if (borderStyleWindow) {
+      borderStyleWindow.focus()
+    } else {
+      createBorderStyleWindow()
+    }
   })
 
   app.on('activate', function () {
