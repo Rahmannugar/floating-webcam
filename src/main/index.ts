@@ -7,6 +7,7 @@ import icon from '../../resources/floatcam-circle.png?asset'
 let camWindow: BrowserWindow | null = null
 let originalCamSize: { width: number; height: number } | null = null
 let borderStyleWindow: BrowserWindow | null = null
+let borderColorWindow: BrowserWindow | null = null
 
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -97,6 +98,30 @@ function createBorderStyleWindow(): BrowserWindow {
   return borderStyleWindow
 }
 
+function createBorderColorWindow(): BrowserWindow {
+  borderColorWindow = new BrowserWindow({
+    width: 164,
+    height: 182,
+    resizable: false,
+    frame: false,
+    transparent: true,
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js')
+    }
+  })
+
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    borderColorWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/bordercolor.html`)
+  } else {
+    borderColorWindow.loadFile(join(__dirname, '../renderer/bordercolor.html'))
+  }
+
+  borderColorWindow.on('closed', () => {
+    borderColorWindow = null
+  })
+  return borderColorWindow
+}
+
 app.whenReady().then(async () => {
   let camAllowed = true
 
@@ -162,10 +187,25 @@ app.whenReady().then(async () => {
     }
   })
 
+  ipcMain.on('open-border-color-window', (_event) => {
+    if (borderColorWindow) {
+      borderColorWindow.focus()
+    } else {
+      createBorderColorWindow()
+    }
+  })
+
   ipcMain.on('close-border-style-window', () => {
     if (borderStyleWindow) {
       borderStyleWindow.close()
       borderStyleWindow = null
+    }
+  })
+
+  ipcMain.on('close-border-color-window', () => {
+    if (borderColorWindow) {
+      borderColorWindow.close()
+      borderColorWindow = null
     }
   })
 

@@ -8,12 +8,15 @@ interface BorderMenuProps {
 const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
   const [width, setWidth] = useState('none')
   const [borderStyleOpen, setBorderStyleOpen] = useState(false)
+  const [borderColorOpen, setBorderColorOpen] = useState(false)
 
   const handleMenu = () => {
     setDefaultMenu(true)
     setOpenBorderMenu(false)
     setBorderStyleOpen(!borderStyleOpen)
     window.electron.ipcRenderer.send('close-border-style-window')
+    window.electron.ipcRenderer.send('close-border-color-window')
+    setBorderColorOpen(!borderColorOpen)
   }
 
   const handleBorderWidth = (width: 'none' | 'thin' | 'medium' | 'thick') => {
@@ -27,6 +30,15 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
       window.electron.ipcRenderer.send('open-border-style-window')
     }
     setBorderStyleOpen(!borderStyleOpen)
+  }
+
+  const toggleBorderColorWindow = () => {
+    if (borderColorOpen) {
+      window.electron.ipcRenderer.send('close-border-color-window')
+    } else {
+      window.electron.ipcRenderer.send('open-border-color-window')
+    }
+    setBorderColorOpen(!borderColorOpen)
   }
 
   return (
@@ -139,7 +151,10 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
             />
           </svg>
         </button>
-        <button className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center">
+        <button
+          onClick={toggleBorderColorWindow}
+          className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        >
           <div className="w-[30px] h-[30px] bg-white rounded-full"></div>
         </button>
       </div>

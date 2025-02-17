@@ -17,7 +17,7 @@ const BorderStyleMenu = () => {
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
         className="h-6 absolute top-0 left-0 right-0"
       />
-
+      <div id="sharp"></div>
       <div className="flex flex-col space-y-3">
         {/* solid button */}
         <button
@@ -80,4 +80,4 @@ const BorderStyleMenu = () => {
   )
 }
 
-ReactDOM.render(<BorderStyleMenu />, document.getElementById('border-root'))
+ReactDOM.render(<BorderStyleMenu />, document.getElementById('border-style-root'))
