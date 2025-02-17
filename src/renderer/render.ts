@@ -51,10 +51,20 @@ window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
 //flip camera
 let isFlipped = false
 
-window.electron.ipcRenderer.on('toggle-flip-camera', () => {
+window.electron.ipcRenderer.on('toggle-flip-camera', (_event) => {
   isFlipped = !isFlipped
-  const videoElement = document.querySelector('video')
-  if (videoElement) {
-    videoElement.style.transform = isFlipped ? 'scaleX(-1)' : 'scaleX(1)'
+  if (!videoPlayer) return
+  if (videoPlayer) {
+    videoPlayer.style.transform = isFlipped ? 'scaleX(-1)' : 'scaleX(1)'
+  }
+})
+
+//change width
+window.electron.ipcRenderer.on('update-width', (_event, width) => {
+  if (!videoPlayer) return
+  if (width === 'none') {
+    videoPlayer.style.borderWidth = '0'
+  } else {
+    videoPlayer.style.borderWidth = width
   }
 })

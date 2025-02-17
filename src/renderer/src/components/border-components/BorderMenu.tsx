@@ -8,10 +8,20 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
     setDefaultMenu(true)
     setOpenBorderMenu(false)
   }
+
+  const handleBorderWidth = (width: 'none' | 'thin' | 'medium' | 'thick') => {
+    window.electron.ipcRenderer.send('change-camera-width', width)
+  }
   return (
     <div className=" space-y-2">
       <div className="text-white w-[44px]  text-[20px] bg-[#3B4956] rounded-[8px] font-bold flex flex-col">
-        <button className="bg-[#0D6EE0] mb-[2px] rounded-[8px] py-3 hover:bg-[#212339]  h-[44px] transition-all duration-200 flex justify-center items-center">
+        {/* no width  button*/}
+        <button
+          onClick={() => {
+            handleBorderWidth('none')
+          }}
+          className="bg-[#0D6EE0] mb-[2px] rounded-[8px] py-3 hover:bg-[#212339]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        >
           <svg
             width="30"
             height="30"
@@ -31,7 +41,13 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           </svg>
         </button>
 
-        <button className="hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center">
+        {/* thin width  button*/}
+        <button
+          onClick={() => {
+            handleBorderWidth('thin')
+          }}
+          className="hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        >
           <svg
             width="19"
             height="19"
@@ -46,7 +62,14 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           </svg>
         </button>
         <div className="bg-[#4A5C6C] w-[30px] mx-auto h-[1.5px]"></div>
-        <button className="hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center">
+
+        {/* medium width button */}
+        <button
+          onClick={() => {
+            handleBorderWidth('medium')
+          }}
+          className="hover:bg-[#212339] my-[2px] py-3 rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        >
           <svg
             width="20"
             height="20"
@@ -61,7 +84,14 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
           </svg>
         </button>
         <div className="bg-[#4A5C6C] w-[30px] mx-auto h-[1.5px]"></div>
-        <button className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center">
+
+        {/* thick width button */}
+        <button
+          onClick={() => {
+            handleBorderWidth('thick')
+          }}
+          className="hover:bg-[#212339] py-3 mt-[2px] rounded-[8px]  h-[44px] transition-all duration-200 flex justify-center items-center"
+        >
           <svg
             width="21"
             height="21"
