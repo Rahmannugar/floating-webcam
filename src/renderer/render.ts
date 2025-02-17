@@ -33,7 +33,7 @@ window.electron.ipcRenderer.on('update-shape', (_event, shape) => {
   if (!videoPlayer) return
 
   if (shape === 'circle') {
-    videoPlayer.style.borderRadius = '50%'
+    videoPlayer.style.borderRadius = '100%'
     videoPlayer.style.width = `${latestSize.width}px`
     videoPlayer.style.height = `${latestSize.height}px`
   } else if (shape === 'square') {
@@ -63,12 +63,9 @@ let latestBorderStyle = 'solid'
 //change width
 window.electron.ipcRenderer.on('update-width', (_event, width) => {
   if (!videoPlayer) return
-  if (width === 'none') {
-    videoPlayer.style.borderWidth = '0'
-  } else {
-    videoPlayer.style.borderWidth = width
-    videoPlayer.style.borderStyle = latestBorderStyle
-  }
+
+  videoPlayer.style.borderWidth = width
+  videoPlayer.style.borderStyle = latestBorderStyle
 })
 
 //change style
@@ -82,4 +79,15 @@ window.electron.ipcRenderer.on('update-style', (_event, style) => {
 window.electron.ipcRenderer.on('update-color', (_event, color) => {
   if (!videoPlayer) return
   videoPlayer.style.borderColor = color
+})
+
+//reset camera settings
+window.electron.ipcRenderer.on('reset-camera-settings', (_event) => {
+  videoPlayer.style.borderRadius = '100%'
+  videoPlayer.style.width = '120px'
+  videoPlayer.style.height = '120px'
+  videoPlayer.style.transform = 'scaleX(1)'
+  videoPlayer.style.borderColor = '#000000'
+  videoPlayer.style.borderWidth = '0px'
+  videoPlayer.style.borderStyle = 'solid'
 })

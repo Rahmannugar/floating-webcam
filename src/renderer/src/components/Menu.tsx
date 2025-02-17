@@ -30,6 +30,9 @@ const Menu = ({
   const handleFlipCamera = () => {
     window.electron.ipcRenderer.send('toggle-flip-camera')
   }
+  const handleResetCamera = () => {
+    window.electron.ipcRenderer.send('reset-camera-settings')
+  }
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -206,7 +209,10 @@ const Menu = ({
       <div className="bg-[#4A5C6C] w-[30px] h-[1.5px]"></div>
 
       {/* reset button */}
-      <button className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200 ">
+      <button
+        onClick={handleResetCamera}
+        className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200 "
+      >
         <svg
           width="30"
           height="31"

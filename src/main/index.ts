@@ -184,6 +184,11 @@ app.whenReady().then(async () => {
     camWindow.webContents.send('update-color', color)
   })
 
+  ipcMain.on('reset-camera-settings', (_event) => {
+    if (!camWindow) return
+    camWindow.webContents.send('reset-camera-settings')
+  })
+
   ipcMain.on('open-border-style-window', (_event) => {
     if (borderStyleWindow) {
       borderStyleWindow.focus()
