@@ -162,6 +162,13 @@ app.whenReady().then(async () => {
     }
   })
 
+  ipcMain.on('close-border-style-window', () => {
+    if (borderStyleWindow) {
+      borderStyleWindow.close()
+      borderStyleWindow = null
+    }
+  })
+
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
       createMainWindow()

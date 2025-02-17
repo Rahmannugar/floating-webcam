@@ -12,6 +12,8 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
   const handleMenu = () => {
     setDefaultMenu(true)
     setOpenBorderMenu(false)
+    setBorderStyleOpen(!borderStyleOpen)
+    window.electron.ipcRenderer.send('close-border-style-window')
   }
 
   const handleBorderWidth = (width: 'none' | 'thin' | 'medium' | 'thick') => {
@@ -19,13 +21,14 @@ const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
     setWidth(width)
   }
   const toggleBorderStyleWindow = () => {
-    window.electron.ipcRenderer.send('open-border-style-window')
-    setBorderStyleOpen(true)
-
     if (borderStyleOpen) {
       window.electron.ipcRenderer.send('close-border-style-window')
+    } else {
+      window.electron.ipcRenderer.send('open-border-style-window')
     }
+    setBorderStyleOpen(!borderStyleOpen)
   }
+
   return (
     <div className=" space-y-2">
       <div className="text-white w-[44px]  text-[20px] bg-[#3B4956] rounded-[8px] font-bold flex flex-col">
