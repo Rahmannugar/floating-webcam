@@ -1,3 +1,5 @@
+import { useCamera } from '@renderer/store/store'
+
 interface MenuProps {
   setOpenResizeMenu: any
   setDefaultMenu: any
@@ -11,6 +13,7 @@ const Menu = ({
   setOpenShapeMenu,
   setOpenBorderMenu
 }: MenuProps) => {
+  const { setShape, setSize, setBorderStyle, setWidth, setBorderColor } = useCamera()
   const handleClose = () => {
     window.electron.ipcRenderer.send('close-window')
   }
@@ -32,6 +35,11 @@ const Menu = ({
   }
   const handleResetCamera = () => {
     window.electron.ipcRenderer.send('reset-camera-settings')
+    setShape('circle')
+    setSize('S')
+    setWidth('none')
+    setBorderStyle('solid')
+    setBorderColor('#000000')
   }
 
   return (

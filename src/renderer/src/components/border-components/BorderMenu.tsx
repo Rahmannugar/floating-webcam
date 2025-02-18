@@ -1,3 +1,4 @@
+import { useCamera } from '@renderer/store/store'
 import { useState } from 'react'
 
 interface BorderMenuProps {
@@ -6,7 +7,7 @@ interface BorderMenuProps {
 }
 
 const BorderMenu = ({ setDefaultMenu, setOpenBorderMenu }: BorderMenuProps) => {
-  const [width, setWidth] = useState('none')
+  const { width, setWidth } = useCamera()
   const [borderStyleOpen, setBorderStyleOpen] = useState(false)
   const [borderColorOpen, setBorderColorOpen] = useState(false)
 

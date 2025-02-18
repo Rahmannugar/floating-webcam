@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCamera } from '@renderer/store/store'
 
 interface ResizeMenuProps {
   setOpenResizeMenu: (open: boolean) => void
@@ -6,7 +6,7 @@ interface ResizeMenuProps {
 }
 
 const ResizeMenu = ({ setOpenResizeMenu, setDefaultMenu }: ResizeMenuProps) => {
-  const [size, setSize] = useState('S')
+  const { size, setSize } = useCamera()
 
   const handleMenu = () => {
     setDefaultMenu(true)

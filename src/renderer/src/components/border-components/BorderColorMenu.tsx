@@ -1,9 +1,9 @@
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import '../../assets/main.css'
-import { useState } from 'react'
+import { CameraProvider, useCamera } from '@renderer/store/store'
 
 const BorderColorMenu = () => {
-  const [borderColor, setBorderColor] = useState('#000000')
+  const { borderColor, setBorderColor } = useCamera()
   const handleChangeColor = (
     color:
       | '#FFFFFF'
@@ -26,6 +26,7 @@ const BorderColorMenu = () => {
     window.electron.ipcRenderer.send('change-camera-color', color)
     setBorderColor(color)
   }
+
   return (
     <div className="w-[164px] h-[182px] flex justify-center items-center bg-[#293845] relative">
       {/* Draggable title bar */}
@@ -154,4 +155,11 @@ const BorderColorMenu = () => {
   )
 }
 
-ReactDOM.render(<BorderColorMenu />, document.getElementById('border-color-root'))
+const root = document.getElementById('border-color-root')
+if (root) {
+  createRoot(root).render(
+    <CameraProvider>
+      <BorderColorMenu />
+    </CameraProvider>
+  )
+}

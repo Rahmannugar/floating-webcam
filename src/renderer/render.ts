@@ -81,11 +81,13 @@ window.electron.ipcRenderer.on('update-color', (_event, color) => {
   videoPlayer.style.borderColor = color
 })
 
+let defaultSize = { width: 140, height: 140 }
+
 //reset camera settings
 window.electron.ipcRenderer.on('reset-camera-settings', (_event) => {
   videoPlayer.style.borderRadius = '100%'
-  videoPlayer.style.width = '120px'
-  videoPlayer.style.height = '120px'
+  videoPlayer.style.width = '100px'
+  videoPlayer.style.height = '100px'
   videoPlayer.style.transform = 'scaleX(1)'
   videoPlayer.style.borderColor = '#000000'
   videoPlayer.style.borderWidth = '0px'

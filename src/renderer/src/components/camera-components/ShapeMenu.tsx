@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCamera } from '@renderer/store/store'
 
 interface ShapeMenuProps {
   setOpenShapeMenu: (open: boolean) => void
@@ -6,7 +6,7 @@ interface ShapeMenuProps {
 }
 
 const ShapeMenu = ({ setOpenShapeMenu, setDefaultMenu }: ShapeMenuProps) => {
-  const [shape, setShape] = useState('circle')
+  const { shape, setShape } = useCamera()
   const handleMenu = () => {
     setDefaultMenu(true)
     setOpenShapeMenu(false)

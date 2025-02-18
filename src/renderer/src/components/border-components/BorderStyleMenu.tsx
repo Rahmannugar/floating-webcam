@@ -1,15 +1,16 @@
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import '../../assets/main.css'
-import { useState } from 'react'
+import { CameraProvider, useCamera } from '@renderer/store/store'
 
 const BorderStyleMenu = () => {
-  const [borderStyle, setBorderStyle] = useState('solid')
+  const { borderStyle, setBorderStyle } = useCamera()
   const handleChangeBorderStyle = (
     style: 'solid' | 'dashed' | 'dotted' | 'double' | 'groove' | 'ridge' | 'inset' | 'outset'
   ) => {
     window.electron.ipcRenderer.send('change-camera-style', style)
     setBorderStyle(style)
   }
+
   return (
     <div className="w-[123px] h-[304px] p-3 bg-[#293845] relative text-white">
       {/* Draggable title bar */}
@@ -80,4 +81,11 @@ const BorderStyleMenu = () => {
   )
 }
 
-ReactDOM.render(<BorderStyleMenu />, document.getElementById('border-style-root'))
+const root = document.getElementById('border-style-root')
+if (root) {
+  createRoot(root).render(
+    <CameraProvider>
+      <BorderStyleMenu />
+    </CameraProvider>
+  )
+}
