@@ -8,6 +8,7 @@ let camWindow: BrowserWindow | null = null
 let originalCamSize: { width: number; height: number } | null = null
 let borderStyleWindow: BrowserWindow | null = null
 let borderColorWindow: BrowserWindow | null = null
+let filterWindow: BrowserWindow | null = null
 
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -120,6 +121,30 @@ function createBorderColorWindow(): BrowserWindow {
     borderColorWindow = null
   })
   return borderColorWindow
+}
+
+function createFilterWindow(): BrowserWindow {
+  filterWindow = new BrowserWindow({
+    width: 164,
+    height: 182,
+    resizable: false,
+    frame: false,
+    transparent: true,
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js')
+    }
+  })
+
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    filterWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/filter.html`)
+  } else {
+    filterWindow.loadFile(join(__dirname, '../renderer/filter.html'))
+  }
+
+  filterWindow.on('closed', () => {
+    filterWindow = null
+  })
+  return filterWindow
 }
 
 app.whenReady().then(async () => {

@@ -11,6 +11,8 @@ interface CameraSettingsContextType {
   setSize: (size: string) => void
   shape: string
   setShape: (shape: string) => void
+  filter: string
+  setFilter: (filter: string) => void
 }
 
 const CameraContext = createContext<CameraSettingsContextType | undefined>(undefined)
@@ -21,6 +23,7 @@ const CameraProvider = ({ children }: { children: React.ReactNode }) => {
   const [borderStyle, setBorderStyle] = useState('solid')
   const [size, setSize] = useState('S')
   const [shape, setShape] = useState('circle')
+  const [filter, setFilter] = useState('none')
 
   return (
     <CameraContext.Provider
@@ -34,7 +37,9 @@ const CameraProvider = ({ children }: { children: React.ReactNode }) => {
         size,
         setSize,
         shape,
-        setShape
+        setShape,
+        filter,
+        setFilter
       }}
     >
       {children}
