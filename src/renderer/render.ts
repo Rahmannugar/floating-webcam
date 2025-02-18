@@ -81,6 +81,13 @@ window.electron.ipcRenderer.on('update-color', (_event, color) => {
   videoPlayer.style.borderColor = color
 })
 
+//change filter
+window.electron.ipcRenderer.on('update-filter', (_event, filter) => {
+  if (!videoPlayer) return
+  videoPlayer.style.filter = filter
+  videoPlayer.style['-webkit-filter'] = `-webkit-${filter}`
+})
+
 let defaultSize = { width: 140, height: 140 }
 
 //reset camera settings

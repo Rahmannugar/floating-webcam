@@ -1,4 +1,5 @@
 import { useCamera } from '@renderer/store/store'
+import { useState } from 'react'
 
 interface MenuProps {
   setOpenResizeMenu: any
@@ -13,7 +14,8 @@ const Menu = ({
   setOpenShapeMenu,
   setOpenBorderMenu
 }: MenuProps) => {
-  const { setShape, setSize, setBorderStyle, setWidth, setBorderColor } = useCamera()
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false)
+  const { setShape, setSize, setBorderStyle, setWidth, setBorderColor, setFilter } = useCamera()
   const handleClose = () => {
     window.electron.ipcRenderer.send('close-window')
   }
@@ -33,6 +35,15 @@ const Menu = ({
   const handleFlipCamera = () => {
     window.electron.ipcRenderer.send('toggle-flip-camera')
   }
+
+  const handleOpenFilterMenu = () => {
+    if (filterMenuOpen) {
+      window.electron.ipcRenderer.send('close-filter-window')
+    } else {
+      window.electron.ipcRenderer.send('open-filter-window')
+    }
+    setFilterMenuOpen(!filterMenuOpen)
+  }
   const handleResetCamera = () => {
     window.electron.ipcRenderer.send('reset-camera-settings')
     setShape('circle')
@@ -40,6 +51,7 @@ const Menu = ({
     setWidth('none')
     setBorderStyle('solid')
     setBorderColor('#000000')
+    setFilter('none')
   }
 
   return (
@@ -158,7 +170,10 @@ const Menu = ({
       <div className="bg-[#4A5C6C] w-[30px] h-[1.5px]"></div>
 
       {/* filter button */}
-      <button className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200 ">
+      <button
+        onClick={handleOpenFilterMenu}
+        className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200 "
+      >
         <svg
           width="30"
           height="30"

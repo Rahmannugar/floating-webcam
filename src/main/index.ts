@@ -126,7 +126,7 @@ function createBorderColorWindow(): BrowserWindow {
 function createFilterWindow(): BrowserWindow {
   filterWindow = new BrowserWindow({
     width: 164,
-    height: 182,
+    height: 448,
     resizable: false,
     frame: false,
     transparent: true,
@@ -209,6 +209,10 @@ app.whenReady().then(async () => {
     if (!camWindow) return
     camWindow.webContents.send('update-color', color)
   })
+  ipcMain.on('change-camera-filter', (_event, filter) => {
+    if (!camWindow) return
+    camWindow.webContents.send('update-filter', filter)
+  })
 
   ipcMain.on('reset-camera-settings', (_event) => {
     if (!camWindow) return
@@ -230,6 +234,13 @@ app.whenReady().then(async () => {
       createBorderColorWindow()
     }
   })
+  ipcMain.on('open-filter-window', (_event) => {
+    if (filterWindow) {
+      filterWindow.focus()
+    } else {
+      createFilterWindow()
+    }
+  })
 
   ipcMain.on('close-border-style-window', () => {
     if (borderStyleWindow) {
@@ -242,6 +253,13 @@ app.whenReady().then(async () => {
     if (borderColorWindow) {
       borderColorWindow.close()
       borderColorWindow = null
+    }
+  })
+
+  ipcMain.on('close-filter-window', () => {
+    if (filterWindow) {
+      filterWindow.close()
+      filterWindow = null
     }
   })
 
