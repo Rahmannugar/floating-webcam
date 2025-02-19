@@ -158,6 +158,9 @@ function createBorderColorWindow(): BrowserWindow {
     }
   })
 
+  const position = getPositionNextToMain()
+  borderColorWindow.setPosition(position.x, position.y)
+
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     borderColorWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/bordercolor.html`)
   } else {
