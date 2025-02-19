@@ -5,10 +5,27 @@ import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/floatcam-circle.png?asset'
 
 let camWindow: BrowserWindow | null = null
-let originalCamSize: { width: number; height: number } | null = null
+let camMenuWindow: BrowserWindow | null = null
 let borderStyleWindow: BrowserWindow | null = null
 let borderColorWindow: BrowserWindow | null = null
 let filterWindow: BrowserWindow | null = null
+let originalCamSize: { width: number; height: number } | null = null
+
+function getPositionNextToMain(): { x: number; y: number } {
+  const mainWindow = BrowserWindow.getAllWindows().find(
+    (win) => win.getSize()[0] === 62 && win.getSize()[1] <= 393
+  )
+
+  if (!mainWindow) {
+    return { x: 100, y: 100 }
+  }
+
+  const bounds = mainWindow.getBounds()
+  return {
+    x: bounds.x + bounds.width + 5,
+    y: bounds.y
+  }
+}
 
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -75,6 +92,33 @@ function createCameraWindow(): BrowserWindow {
   return camWindow
 }
 
+function createCamMenuWindow(): BrowserWindow {
+  camMenuWindow = new BrowserWindow({
+    width: 164,
+    height: 448,
+    resizable: false,
+    frame: false,
+    transparent: true,
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js')
+    }
+  })
+
+  const position = getPositionNextToMain()
+  camMenuWindow.setPosition(position.x, position.y)
+
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    camMenuWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/cam-menu.html`)
+  } else {
+    camMenuWindow.loadFile(join(__dirname, '../renderer/cam-menu.html'))
+  }
+
+  camMenuWindow.on('closed', () => {
+    camMenuWindow = null
+  })
+  return camMenuWindow
+}
+
 function createBorderStyleWindow(): BrowserWindow {
   borderStyleWindow = new BrowserWindow({
     width: 123,
@@ -86,6 +130,9 @@ function createBorderStyleWindow(): BrowserWindow {
       preload: join(__dirname, '../preload/index.js')
     }
   })
+
+  const position = getPositionNextToMain()
+  borderStyleWindow.setPosition(position.x, position.y)
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     borderStyleWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/borderstyle.html`)
@@ -219,6 +266,14 @@ app.whenReady().then(async () => {
     camWindow.webContents.send('reset-camera-settings')
   })
 
+  ipcMain.on('open-cam-menu-window', (_event) => {
+    if (camMenuWindow) {
+      camMenuWindow.focus()
+    } else {
+      createCamMenuWindow()
+    }
+  })
+
   ipcMain.on('open-border-style-window', (_event) => {
     if (borderStyleWindow) {
       borderStyleWindow.focus()
@@ -239,6 +294,13 @@ app.whenReady().then(async () => {
       filterWindow.focus()
     } else {
       createFilterWindow()
+    }
+  })
+
+  ipcMain.on('close-cam-menu-window', () => {
+    if (camMenuWindow) {
+      camMenuWindow.close()
+      camMenuWindow = null
     }
   })
 

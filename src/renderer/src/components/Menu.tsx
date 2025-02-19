@@ -14,6 +14,7 @@ const Menu = ({
   setOpenShapeMenu,
   setOpenBorderMenu
 }: MenuProps) => {
+  const [cameraMenuOpen, setCameraMenuOpen] = useState(false)
   const [filterMenuOpen, setFilterMenuOpen] = useState(false)
   const { setShape, setSize, setBorderStyle, setWidth, setBorderColor, setFilter } = useCamera()
   const handleClose = () => {
@@ -36,6 +37,15 @@ const Menu = ({
     window.electron.ipcRenderer.send('toggle-flip-camera')
   }
 
+  const handleOpenCameraMenu = () => {
+    if (cameraMenuOpen) {
+      window.electron.ipcRenderer.send('close-cam-menu-window')
+    } else {
+      window.electron.ipcRenderer.send('open-cam-menu-window')
+    }
+    setCameraMenuOpen(!cameraMenuOpen)
+  }
+
   const handleOpenFilterMenu = () => {
     if (filterMenuOpen) {
       window.electron.ipcRenderer.send('close-filter-window')
@@ -44,6 +54,7 @@ const Menu = ({
     }
     setFilterMenuOpen(!filterMenuOpen)
   }
+
   const handleResetCamera = () => {
     window.electron.ipcRenderer.send('reset-camera-settings')
     setShape('circle')
@@ -57,7 +68,10 @@ const Menu = ({
   return (
     <div className="flex flex-col justify-center items-center">
       {/* camera button */}
-      <button className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200">
+      <button
+        onClick={handleOpenCameraMenu}
+        className="hover:bg-[#212339] p-2 rounded-[8px] transition-all duration-200"
+      >
         <svg
           width="30"
           height="30"
