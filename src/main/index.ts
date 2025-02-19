@@ -185,6 +185,9 @@ function createFilterWindow(): BrowserWindow {
     }
   })
 
+  const position = getPositionNextToMain()
+  filterWindow.setPosition(position.x, position.y)
+
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     filterWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/filter.html`)
   } else {
