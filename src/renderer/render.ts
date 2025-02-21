@@ -21,7 +21,15 @@ if (!videoPlayer) {
 
 // Listen for camera device changes
 window.electron.ipcRenderer.on('set-camera-device', (_event, deviceId) => {
-  startCamera(deviceId)
+  if (deviceId === null) {
+    if (videoPlayer && videoPlayer.srcObject) {
+      const stream = videoPlayer.srcObject as MediaStream
+      stream.getTracks().forEach((track) => track.stop())
+      videoPlayer.srcObject = null
+    }
+  } else {
+    startCamera(deviceId)
+  }
 })
 
 let latestSize = { width: 140, height: 140 }

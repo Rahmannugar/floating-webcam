@@ -22,6 +22,12 @@ const CameraMenu = () => {
             label: device.label || `Camera ${device.deviceId.slice(0, 5)}...`
           }))
         setCameraDevices(videoDevices)
+
+        if (videoDevices.length > 0) {
+          const defaultDevice = videoDevices[0].deviceId
+          setSelectedDevice(defaultDevice)
+          window.electron.ipcRenderer.send('camera-device-selected', defaultDevice)
+        }
       } catch (error) {
         console.error('Error enumerating devices:', error)
       }
@@ -31,8 +37,13 @@ const CameraMenu = () => {
   }, [])
 
   const handleDeviceSelect = (deviceId: string) => {
-    setSelectedDevice(deviceId)
-    window.electron.ipcRenderer.send('camera-device-selected', deviceId)
+    if (selectedDevice === deviceId) {
+      setSelectedDevice('')
+      window.electron.ipcRenderer.send('camera-device-selected', null)
+    } else {
+      setSelectedDevice(deviceId)
+      window.electron.ipcRenderer.send('camera-device-selected', deviceId)
+    }
   }
 
   return (
