@@ -1,4 +1,4 @@
-//main
+//main.ts
 import { app, shell, BrowserWindow, ipcMain, systemPreferences, Notification } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
@@ -229,6 +229,10 @@ app.whenReady().then(async () => {
 
   ipcMain.on('close-window', () => {
     BrowserWindow.getAllWindows().forEach((window) => window.close())
+  })
+
+  ipcMain.on('camera-device-selected', (_event, deviceId) => {
+    camWindow.webContents.send('set-camera-device', deviceId)
   })
 
   ipcMain.on('change-camera-size', (_event, size) => {

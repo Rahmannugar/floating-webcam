@@ -1,3 +1,4 @@
+//preload.ts
 import { contextBridge, ipcRenderer } from 'electron'
 
 // Custom APIs for renderer
