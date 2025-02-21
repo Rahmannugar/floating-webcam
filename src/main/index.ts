@@ -1,5 +1,13 @@
 //main.ts
-import { app, shell, BrowserWindow, ipcMain, systemPreferences, Notification } from 'electron'
+import {
+  app,
+  shell,
+  BrowserWindow,
+  ipcMain,
+  systemPreferences,
+  Notification,
+  screen
+} from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/floatcam-circle.png?asset'
@@ -11,10 +19,18 @@ let borderColorWindow: BrowserWindow | null = null
 let filterWindow: BrowserWindow | null = null
 let originalCamSize: { width: number; height: number } | null = null
 
+function getMainWindowPosition(): { x: number; y: number } {
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width, height } = primaryDisplay.workAreaSize
+
+  return {
+    x: width - 62 - 80,
+    y: 100
+  }
+}
+
 function getPositionNextToMain(): { x: number; y: number } {
-  const mainWindow = BrowserWindow.getAllWindows().find(
-    (win) => win.getSize()[0] === 62 && win.getSize()[1] <= 393
-  )
+  const mainWindow = BrowserWindow.getAllWindows().find((win) => (win as any).isMainWindow)
 
   if (!mainWindow) {
     return { x: 100, y: 100 }
@@ -22,7 +38,7 @@ function getPositionNextToMain(): { x: number; y: number } {
 
   const bounds = mainWindow.getBounds()
   return {
-    x: bounds.x + bounds.width + 5,
+    x: bounds.x - 180,
     y: bounds.y
   }
 }
@@ -30,7 +46,7 @@ function getPositionNextToMain(): { x: number; y: number } {
 function createMainWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
     width: 62,
-    maxHeight: 393,
+    height: 393,
     maximizable: false,
     resizable: false,
     show: false,
@@ -60,6 +76,11 @@ function createMainWindow(): BrowserWindow {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  ;(mainWindow as any).isMainWindow = true
+
+  const position = getMainWindowPosition()
+  mainWindow.setPosition(position.x, position.y)
 
   return mainWindow
 }
