@@ -23,36 +23,46 @@ const Menu = ({
   const handleOpenResizeMenu = () => {
     setOpenResizeMenu(true)
     setDefaultMenu(false)
+    window.electron.ipcRenderer.send('close-cam-menu-window')
+    window.electron.ipcRenderer.send('close-filter-window')
   }
 
   const handleOpenShapeMenu = () => {
     setOpenShapeMenu(true)
     setDefaultMenu(false)
+    window.electron.ipcRenderer.send('close-cam-menu-window')
+    window.electron.ipcRenderer.send('close-filter-window')
   }
   const handleOpenBorderMenu = () => {
     setOpenBorderMenu(true)
     setDefaultMenu(false)
+    window.electron.ipcRenderer.send('close-cam-menu-window')
+    window.electron.ipcRenderer.send('close-filter-window')
   }
   const handleFlipCamera = () => {
     window.electron.ipcRenderer.send('toggle-flip-camera')
+    window.electron.ipcRenderer.send('close-cam-menu-window')
+    window.electron.ipcRenderer.send('close-filter-window')
   }
 
   const handleOpenCameraMenu = () => {
+    setCameraMenuOpen(!cameraMenuOpen)
     if (cameraMenuOpen) {
       window.electron.ipcRenderer.send('close-cam-menu-window')
     } else {
       window.electron.ipcRenderer.send('open-cam-menu-window')
+      window.electron.ipcRenderer.send('close-filter-window')
     }
-    setCameraMenuOpen(!cameraMenuOpen)
   }
 
   const handleOpenFilterMenu = () => {
+    setFilterMenuOpen(!filterMenuOpen)
     if (filterMenuOpen) {
       window.electron.ipcRenderer.send('close-filter-window')
     } else {
       window.electron.ipcRenderer.send('open-filter-window')
+      window.electron.ipcRenderer.send('close-cam-menu-window')
     }
-    setFilterMenuOpen(!filterMenuOpen)
   }
 
   const handleResetCamera = () => {

@@ -21,7 +21,7 @@ let originalCamSize: { width: number; height: number } | null = null
 
 function getMainWindowPosition(): { x: number; y: number } {
   const primaryDisplay = screen.getPrimaryDisplay()
-  const { width, height } = primaryDisplay.workAreaSize
+  const { width } = primaryDisplay.workAreaSize
 
   return {
     x: width - 62 - 80,
