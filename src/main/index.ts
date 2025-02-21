@@ -38,7 +38,7 @@ function getPositionNextToMain(): { x: number; y: number } {
 
   const bounds = mainWindow.getBounds()
   return {
-    x: bounds.x - 180,
+    x: bounds.x - 250,
     y: bounds.y
   }
 }
@@ -115,8 +115,8 @@ function createCameraWindow(): BrowserWindow {
 
 function createCamMenuWindow(): BrowserWindow {
   camMenuWindow = new BrowserWindow({
-    width: 164,
-    height: 448,
+    width: 223,
+    maxHeight: 448,
     resizable: false,
     frame: false,
     transparent: true,
@@ -142,7 +142,7 @@ function createCamMenuWindow(): BrowserWindow {
 
 function createBorderStyleWindow(): BrowserWindow {
   borderStyleWindow = new BrowserWindow({
-    width: 123,
+    width: 133,
     height: 304,
     resizable: false,
     frame: false,
@@ -169,7 +169,7 @@ function createBorderStyleWindow(): BrowserWindow {
 
 function createBorderColorWindow(): BrowserWindow {
   borderColorWindow = new BrowserWindow({
-    width: 164,
+    width: 174,
     height: 182,
     resizable: false,
     frame: false,
@@ -196,7 +196,7 @@ function createBorderColorWindow(): BrowserWindow {
 
 function createFilterWindow(): BrowserWindow {
   filterWindow = new BrowserWindow({
-    width: 164,
+    width: 174,
     height: 448,
     resizable: false,
     frame: false,

@@ -37,17 +37,19 @@ const CameraMenu = () => {
   }, [])
 
   const handleDeviceSelect = (deviceId: string) => {
-    if (selectedDevice === deviceId) {
-      setSelectedDevice('')
-      window.electron.ipcRenderer.send('camera-device-selected', null)
-    } else {
-      setSelectedDevice(deviceId)
-      window.electron.ipcRenderer.send('camera-device-selected', deviceId)
+    let newDevice = selectedDevice === deviceId ? '' : deviceId
+    setSelectedDevice(newDevice)
+
+    if (!newDevice && cameraDevices.length > 0) {
+      newDevice = cameraDevices[0].deviceId
+      setSelectedDevice(newDevice)
     }
+
+    window.electron.ipcRenderer.send('camera-device-selected', newDevice)
   }
 
   return (
-    <div className="w-[213px] h-auto min-h-[88px] flex flex-col bg-[#293845] relative p-4">
+    <div className="window-menu w-[213px] h-auto min-h-[88px] flex flex-col bg-[#293845] relative p-3">
       {/* Draggable title bar */}
       <div
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}

@@ -21,12 +21,15 @@ if (!videoPlayer) {
 
 // Listen for camera device changes
 window.electron.ipcRenderer.on('set-camera-device', (_event, deviceId) => {
-  if (deviceId === null) {
-    if (videoPlayer && videoPlayer.srcObject) {
-      const stream = videoPlayer.srcObject as MediaStream
-      stream.getTracks().forEach((track) => track.stop())
-      videoPlayer.srcObject = null
-    }
+  if (!videoPlayer) return
+
+  if (!deviceId) {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const videoDevices = devices.filter((device) => device.kind === 'videoinput')
+      if (videoDevices.length > 0) {
+        startCamera(videoDevices[0].deviceId)
+      }
+    })
   } else {
     startCamera(deviceId)
   }

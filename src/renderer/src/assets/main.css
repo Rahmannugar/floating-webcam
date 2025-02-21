@@ -8,3 +8,20 @@
 *::-webkit-scrollbar {
     display: none;
 }
+
+.window-menu {
+    border-radius: 4px;
+    position: relative;
+    overflow: visible;
+}
+
+.window-menu::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    border-width: 5px;
+    border-style: solid;
+
+    border-color: transparent transparent transparent #293845;
+}

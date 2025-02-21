@@ -28,7 +28,7 @@ const BorderColorMenu = () => {
   }
 
   return (
-    <div className="w-[164px] h-[182px] flex justify-center items-center bg-[#293845] relative">
+    <div className="window-menu w-[164px] h-[182px] flex justify-center items-center bg-[#293845] relative">
       {/* Draggable title bar */}
       <div
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
