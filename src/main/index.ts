@@ -1,4 +1,4 @@
-//main
+//main.ts
 import {
   app,
   shell,
