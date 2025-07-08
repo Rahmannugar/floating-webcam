@@ -115,4 +115,5 @@ window.electron.ipcRenderer.on('reset-camera-settings', () => {
   videoPlayer.style.borderColor = '#000000'
   videoPlayer.style.borderWidth = '0px'
   videoPlayer.style.borderStyle = 'solid'
+  videoPlayer.style.filter = 'none'
 })
